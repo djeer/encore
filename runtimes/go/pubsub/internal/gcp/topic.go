@@ -104,8 +104,11 @@ func (t *topic) Subscribe(logger *zerolog.Logger, maxConcurrency int, ackDeadlin
 		}
 		subscription.ReceiveSettings.MaxOutstandingMessages = maxConcurrency
 
-		if experiments.AdaptiveGCPPubSubGoroutines.Enabled(t.mgr.experiments) {
-			// Compute the number of goroutines to use for this subscription.
+		if gcpCfg.NumGoroutines > 0 {
+			// User explicitly configured NumGoroutines
+			subscription.ReceiveSettings.NumGoroutines = gcpCfg.NumGoroutines
+		} else if experiments.AdaptiveGCPPubSubGoroutines.Enabled(t.mgr.experiments) {
+			// Use adaptive calculation if experiment is enabled
 			streamingSubsInProject := 0
 			for _, topic := range t.mgr.runtime.PubsubTopics {
 				for _, sub := range topic.Subscriptions {
@@ -116,6 +119,7 @@ func (t *topic) Subscribe(logger *zerolog.Logger, maxConcurrency int, ackDeadlin
 			}
 			subscription.ReceiveSettings.NumGoroutines = numGoroutines(streamingSubsInProject)
 		}
+		// Otherwise, use GCP's default (10)
 
 		// Start the subscription with the GCP library
 		go func() {

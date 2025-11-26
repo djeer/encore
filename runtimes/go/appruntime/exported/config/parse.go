@@ -345,7 +345,10 @@ func parseInfraConfigEnv(infraCfgPath string) *Runtime {
 						EncoreName:   subName,
 						ProviderName: subscription.Name,
 						PushOnly:     subscription.PushConfig != nil,
-						GCP:          &PubsubSubscriptionGCPData{ProjectID: orDefault(subscription.ProjectID, pubsub.GCP.ProjectID)},
+						GCP: &PubsubSubscriptionGCPData{
+							ProjectID:     orDefault(subscription.ProjectID, pubsub.GCP.ProjectID),
+							NumGoroutines: subscription.NumGoroutines,
+						},
 					}
 					if subscription.PushConfig != nil {
 						sub.ID = subscription.PushConfig.ID

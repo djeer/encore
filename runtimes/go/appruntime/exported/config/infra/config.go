@@ -649,6 +649,11 @@ type GCPSub struct {
 	Name       string      `json:"name,omitempty"`
 	ProjectID  string      `json:"project_id,omitempty"`
 	PushConfig *PushConfig `json:"push_config,omitempty"`
+
+	// NumGoroutines is the number of goroutines (streaming pull connections) used
+	// to pull messages from the subscription.
+	// If zero, it defaults to the GCP client library's default (10).
+	NumGoroutines int `json:"num_goroutines,omitempty"`
 }
 
 func (g *GCPSub) Validate(v *validator) {

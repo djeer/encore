@@ -385,6 +385,7 @@ func (c *legacyConverter) Convert() (*config.Runtime, error) {
 								return &config.PubsubSubscriptionGCPData{
 									ProjectID:          pc.GcpConfig.ProjectId,
 									PushServiceAccount: pc.GcpConfig.GetPushServiceAccount(),
+									NumGoroutines:      int(pc.GcpConfig.GetNumGoroutines()),
 								}
 							}
 							return nil

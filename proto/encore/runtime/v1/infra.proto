@@ -307,6 +307,10 @@ message PubSubSubscription {
     // The audience to use when validating JWTs delivered over push.
     // If set, the JWT audience claim must match. If unset, any JWT audience is allowed.
     optional string push_jwt_audience = 3;
+
+    // The number of goroutines (streaming pull connections) to use for this subscription.
+    // If zero, defaults to the GCP client library default (10).
+    optional int32 num_goroutines = 4;
   }
 }
 

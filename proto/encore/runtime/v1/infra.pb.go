@@ -2278,6 +2278,9 @@ type PubSubSubscription_GCPConfig struct {
 	// The audience to use when validating JWTs delivered over push.
 	// If set, the JWT audience claim must match. If unset, any JWT audience is allowed.
 	PushJwtAudience *string `protobuf:"bytes,3,opt,name=push_jwt_audience,json=pushJwtAudience,proto3,oneof" json:"push_jwt_audience,omitempty"`
+	// The number of goroutines (streaming pull connections) to use for this subscription.
+	// If zero, defaults to the GCP client library default (10).
+	NumGoroutines *int32 `protobuf:"varint,4,opt,name=num_goroutines,json=numGoroutines,proto3,oneof" json:"num_goroutines,omitempty"`
 }
 
 func (x *PubSubSubscription_GCPConfig) Reset() {
@@ -2331,6 +2334,13 @@ func (x *PubSubSubscription_GCPConfig) GetPushJwtAudience() string {
 		return *x.PushJwtAudience
 	}
 	return ""
+}
+
+func (x *PubSubSubscription_GCPConfig) GetNumGoroutines() int32 {
+	if x != nil && x.NumGoroutines != nil {
+		return *x.NumGoroutines
+	}
+	return 0
 }
 
 type BucketCluster_S3 struct {

@@ -314,6 +314,14 @@ type PubsubSubscriptionGCPData struct {
 	// messages being delivered over push.
 	// If empty pushes are not accepted.
 	PushServiceAccount string `json:"push_service_account"`
+
+	// NumGoroutines is the number of goroutines (streaming pull connections) used
+	// to pull messages from the subscription. This directly controls the number of
+	// concurrent streaming connections to the Pub/Sub service.
+	//
+	// If zero, it defaults to the GCP client library's default (10), unless the
+	// adaptive-gcp-pubsub-goroutines experiment is enabled.
+	NumGoroutines int `json:"num_goroutines,omitempty"`
 }
 
 type StaticPubsubTopic struct {
